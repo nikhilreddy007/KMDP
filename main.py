@@ -1,0 +1,46 @@
+from dataManager import createData, createSBS, readData, readSBS
+from algorithms.IG import IG
+from algorithms.SPG import SPG
+from algorithms.Apriori import Apriori
+from algorithms.UBP import UBP
+from clustering import *
+import numpy as np
+import datetime
+
+# Change the fileLocation to your car.data folder
+dataLocation = "./data_process/car.csv"
+sbsLocation = "./data_process/car_SBS.csv"
+datasetLocation = "./dataset/car/car.data"
+
+try:
+    data = readData(dataLocation) 
+    SBS = readSBS(sbsLocation)
+except:
+    data = createData(datasetLocation) 
+    SBS = createSBS(data, datasetLocation)
+
+rows=len(SBS)
+cols=len(SBS[0])
+
+# Creating IDs of Customers, Candidate Products and Existing Products.
+C = np.arange(0, cols)
+EP = np.arange(0, (rows*30)//100)
+CP = np.arange((rows*30)//100, rows)
+
+selectedProdsCount = 5
+
+# IG
+timeTaken = datetime.datetime.now()
+selectedProdsIG, noOfCustomers = IG(selectedProdsCount, C, SBS, EP, CP)
+timeTaken = datetime.datetime.now() - timeTaken
+print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
+print("Time taken:", timeTaken.seconds)
+print("No of customers:", noOfCustomers)
+
+# SPGA
+timeTaken = datetime.datetime.now()
+selectedProdsSPG, noOfCustomers = SPG(selectedProdsCount, C, SBS, EP, CP)
+timeTaken = datetime.datetime.now() - timeTaken 
+print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
+print("Time taken:", timeTaken.seconds)
+print("No of customers:", noOfCustomers)
