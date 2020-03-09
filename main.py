@@ -4,6 +4,7 @@ from algorithms.SPG import SPG
 from algorithms.Apriori import Apriori
 from algorithms.UBP import UBP
 from clustering import *
+from sampling import sampling
 import numpy as np
 import datetime
 
@@ -45,3 +46,8 @@ print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
 print("Time taken:", timeTaken.seconds)
 print("Product score:", productScore)
 
+sampledEP, sampledCP = sampling(EP, CP)
+
+print("Sampled EP, CP length:", len(sampledEP), len(sampledCP))
+bestSampledProds, productScore = SPG(k, C, SBS, sampledEP, sampledCP)
+print("Best sampled products:", bestSampledProds)
