@@ -27,20 +27,21 @@ C = np.arange(0, cols)
 EP = np.arange(0, (rows*30)//100)
 CP = np.arange((rows*30)//100, rows)
 
-selectedProdsCount = 5
+k = 5
 
 # IG
 timeTaken = datetime.datetime.now()
-selectedProdsIG, noOfCustomers = IG(selectedProdsCount, C, SBS, EP, CP)
+selectedProdsIG, productScore = IG(k, C, SBS, EP, CP)
 timeTaken = datetime.datetime.now() - timeTaken
 print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
 print("Time taken:", timeTaken.seconds)
-print("No of customers:", noOfCustomers)
+print("Product score:", productScore)
 
 # SPGA
 timeTaken = datetime.datetime.now()
-selectedProdsSPG, noOfCustomers = SPG(selectedProdsCount, C, SBS, EP, CP)
+selectedProdsSPG, productScore = SPG(k, C, SBS, EP, CP)
 timeTaken = datetime.datetime.now() - timeTaken 
 print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
 print("Time taken:", timeTaken.seconds)
-print("No of customers:", noOfCustomers)
+print("Product score:", productScore)
+
