@@ -1,5 +1,4 @@
 import numpy as np
-import datetime
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from statistics import mode
@@ -50,9 +49,9 @@ def K_Means(data, SBS, C, EP, CP, selected_products, n_clusters = 5):
   cluster_nos_of_selected_products = [kmeans.labels_[i] for i in selected_products]
 
   # Run over the cluster from which majority of the products have been selected previously.
-  # cluster = max(set(cluster_nos_of_selected_products), key = cluster_nos_of_selected_products.count)
-  cluster = mode(cluster_nos_of_selected_products)
-  print('Selected cluster:', cluster)
+  cluster = max(set(cluster_nos_of_selected_products), key = cluster_nos_of_selected_products.count)
+  # cluster = mode(cluster_nos_of_selected_products)
+  # print('Selected cluster:', cluster)
 
   SBS_New = SBS[arr[cluster]]
   # SBS_New = np.append(SBS_New, SBS[EP,:], axis=0)
