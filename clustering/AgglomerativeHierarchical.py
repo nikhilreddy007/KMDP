@@ -11,11 +11,10 @@ def Agglomerative_Clustering(data, SBS, C, EP, CP, selected_products, n_clusters
   EP_Length = len(EP)
   # list of lists
   arr = [[] for i in range(n_clusters)]
-  arrEP = [[] for i in range(n_clusters)]
   for i,j in enumerate(agc.labels_):
     arr[j].append(i)
-    if(i < EP_Length):
-      arrEP[j].append(i)
+    # if(i < EP_Length):
+    #   arrEP[j].append(i)
 
   # Clusters = [[] for i in range(n_clusters)]
   # for i in range(n_clusters):
@@ -31,10 +30,11 @@ def Agglomerative_Clustering(data, SBS, C, EP, CP, selected_products, n_clusters
 #   cluster = mode(cluster_nos_of_selected_products)/
   # print('Selected cluster:', cluster)
 
-  SBS_New = SBS[arr[cluster]]
-  # SBS_New = np.append(SBS_New, SBS[EP,:], axis=0)
+  EP_New, CP_New = [], []
+  for i in arr[cluster]:
+    if i<EP_Length:
+      EP_New.append(i)
+    else:
+      CP_New.append(i)
 
-  EP_New = range(len(arrEP))
-  CP_NEW = range(len(arrEP), len(SBS_New))
-
-  return SBS_New, EP_New, CP_NEW
+  return EP_New, CP_New
