@@ -3,7 +3,7 @@ from algorithms.IG import IG
 from algorithms.SPG import SPG
 from algorithms.Apriori import Apriori
 from algorithms.UBP import UBP
-from clustering import *
+from clustering import KMeans
 from sampling import sampling
 import numpy as np
 import datetime
@@ -49,5 +49,9 @@ print("Product score:", productScore)
 sampledEP, sampledCP = sampling(EP, CP)
 
 print("Sampled EP, CP length:", len(sampledEP), len(sampledCP))
-bestSampledProds, productScore = SPG(k, C, SBS, sampledEP, sampledCP)
+bestSampledProds, productScore = SPG(k*5, C, SBS, sampledEP, sampledCP)
 print("Best sampled products:", bestSampledProds)
+
+SBS_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds)
+
+print('Length of selected cluster:', len(SBS_New))
