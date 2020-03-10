@@ -31,10 +31,14 @@ def calc_KMean_clusters(SBS):
 def K_Means(data, SBS, C, EP, CP, selected_products, n_clusters = 5):
   kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(data)
   
+  EP_Length = len(EP)
   # list of lists
   arr = [[] for i in range(n_clusters)]
+  arrEP = [[] for i in range(n_clusters)]
   for i,j in enumerate(kmeans.labels_):
     arr[j].append(i)
+    if(i < EP_Length):
+      arrEP[j].append(i)
 
   # Clusters = [[] for i in range(n_clusters)]
   # for i in range(n_clusters):
@@ -51,9 +55,12 @@ def K_Means(data, SBS, C, EP, CP, selected_products, n_clusters = 5):
   print('Selected cluster:', cluster)
 
   SBS_New = SBS[arr[cluster]]
-  SBS_New = np.append(SBS_New, SBS[EP,:], axis=0)
+  # SBS_New = np.append(SBS_New, SBS[EP,:], axis=0)
 
-  return SBS_New
+  EP_New = range(len(arrEP))
+  CP_NEW = range(len(arrEP), len(SBS_New))
+
+  return SBS_New, EP_New, CP_NEW
   # rows,cols = SBS_New.shape
 
   # Creating Sets of Customers, Candidate Products and Existing Products.

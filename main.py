@@ -49,9 +49,26 @@ print("Product score:", productScore)
 sampledEP, sampledCP = sampling(EP, CP)
 
 print("Sampled EP, CP length:", len(sampledEP), len(sampledCP))
-bestSampledProds, productScore = SPG(k*5, C, SBS, sampledEP, sampledCP)
+bestSampledProds, productScore = SPG(k*2, C, SBS, sampledEP, sampledCP)
 print("Best sampled products:", bestSampledProds)
 
-SBS_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds)
+SBS_New, EP_New, CP_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds, n_clusters = 10)
 
 print('Length of selected cluster:', len(SBS_New))
+
+print('After KMeans clustering:')
+# IG after KMeans
+timeTaken = datetime.datetime.now()
+selectedProdsIG, productScore = IG(k, C, SBS_New, EP_New, CP_New)
+timeTaken = datetime.datetime.now() - timeTaken
+print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
+print("Time taken:", timeTaken.seconds)
+print("Product score:", productScore)
+
+# SPGA after KMeans
+timeTaken = datetime.datetime.now()
+selectedProdsSPG, productScore = SPG(k, C, SBS_New, EP_New, CP_New)
+timeTaken = datetime.datetime.now() - timeTaken 
+print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
+print("Time taken:", timeTaken.seconds)
+print("Product score:", productScore)
