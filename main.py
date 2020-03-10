@@ -8,6 +8,9 @@ from sampling import sampling
 import numpy as np
 import time
 
+
+# ====================================FILE HANDLING===================================
+
 # Change the fileLocation to your car.data folder
 dataLocation = "./data_process/car.csv"
 sbsLocation = "./data_process/car_SBS.csv"
@@ -20,6 +23,9 @@ except:
     data = createData(datasetLocation) 
     SBS = createSBS(data, datasetLocation)
 
+
+# =======================================GLOBALS======================================
+
 rows=len(SBS)
 cols=len(SBS[0])
 
@@ -28,7 +34,11 @@ C = np.arange(0, cols)
 EP = np.arange(0, (rows*30)//100)
 CP = np.arange((rows*30)//100, rows)
 
+# Number of products to select
 k = 5
+
+
+# =================================BEFORE CLUSTERING==================================
 
 print('BEFORE CLUSTERING:')
 # IG
@@ -47,15 +57,18 @@ print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
 print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
+
+# =====================================SAMPLING========================================
+
 sampledEP, sampledCP = sampling(EP, CP)
 
-# print("Sampled EP, CP length:", len(sampledEP), len(sampledCP))
 bestSampledProds, productScore = SPG(k*2, C, SBS, sampledEP, sampledCP)
 # print("Best sampled products:", bestSampledProds)
 
-# Kmeans clustering
+
+# =================================KMEANS CLUSTERING====================================
+
 EP_New, CP_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds, n_clusters = 10)
-# print('Length of selected cluster:', len(SBS_New))
 
 print('AFTER KMEANS CLUSTERING:')
 # IG after KMeans
@@ -74,9 +87,10 @@ print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
 print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
-# Agglomerative clustering
+
+# ================================AGGLOMERATIVE CLUSTERING===============================
+
 EP_New, CP_New = AgglomerativeHierarchical.Agglomerative_Clustering(data, SBS, C, EP, CP, bestSampledProds, n_clusters=10)
-# print('Length of selected cluster:', len(SBS_New))
 
 print('AFTER AGGLOMERATIVE CLUSTERING:')
 # IG after KMeans
