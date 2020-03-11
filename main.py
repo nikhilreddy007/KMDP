@@ -3,7 +3,7 @@ from algorithms.IG import IG
 from algorithms.SPG import SPG
 from algorithms.Apriori import Apriori
 from algorithms.UBP import UBP
-from clustering import KMeans, AgglomerativeHierarchical
+from clustering import KMeans, AgglomerativeHierarchical, AffinityPropagation, MeanShift
 from sampling import sampling
 import numpy as np
 import time
@@ -66,12 +66,12 @@ bestSampledProds, productScore = SPG(k*2, C, SBS, sampledEP, sampledCP)
 # print("Best sampled products:", bestSampledProds)
 
 
-# =================================KMEANS CLUSTERING====================================
+# =================================AFFINITY PROPAGATION===============================
 
-EP_New, CP_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds, n_clusters = 10)
+EP_New, CP_New, n_clusters = AffinityPropagation.Affinity_Propagation(data, SBS, C, EP, CP, bestSampledProds)
 
-print('AFTER KMEANS CLUSTERING:')
-# IG after KMeans
+print('AFTER AFFINITY PROPAGATION:')
+# IG
 timeTaken = int(round(time.time() * 1000))
 selectedProdsIG, productScore = IG(k, C, SBS, EP_New, CP_New)
 timeTaken = int(round(time.time() * 1000)) - timeTaken
@@ -79,7 +79,51 @@ print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
 print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
-# SPGA after KMeans
+# SPG
+timeTaken = int(round(time.time() * 1000))
+selectedProdsSPG, productScore = SPG(k, C, SBS, EP_New, CP_New)
+timeTaken = int(round(time.time() * 1000)) - timeTaken 
+print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
+print("Time taken in millis:", timeTaken)
+# print("Product score:", productScore)
+
+
+# =================================MEAN SHIFT CLUSTERING==============================
+
+EP_New, CP_New = MeanShift.Mean_Shift(data, SBS, C, EP, CP, bestSampledProds)
+
+print('AFTER MEAN SHIFT CLUSTERING:')
+# IG
+timeTaken = int(round(time.time() * 1000))
+selectedProdsIG, productScore = IG(k, C, SBS, EP_New, CP_New)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
+print("Time taken in millis:", timeTaken)
+# print("Product score:", productScore)
+
+# SPG
+timeTaken = int(round(time.time() * 1000))
+selectedProdsSPG, productScore = SPG(k, C, SBS, EP_New, CP_New)
+timeTaken = int(round(time.time() * 1000)) - timeTaken 
+print("Single Product Based Greedy Algorithm : \n", selectedProdsSPG)
+print("Time taken in millis:", timeTaken)
+# print("Product score:", productScore)
+
+
+# =================================KMEANS CLUSTERING====================================
+
+EP_New, CP_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds, n_clusters)
+
+print('AFTER KMEANS CLUSTERING:')
+# IG
+timeTaken = int(round(time.time() * 1000))
+selectedProdsIG, productScore = IG(k, C, SBS, EP_New, CP_New)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
+print("Time taken in millis:", timeTaken)
+# print("Product score:", productScore)
+
+# SPG
 timeTaken = int(round(time.time() * 1000))
 selectedProdsSPG, productScore = SPG(k, C, SBS, EP_New, CP_New)
 timeTaken = int(round(time.time() * 1000)) - timeTaken 
@@ -90,10 +134,10 @@ print("Time taken in millis:", timeTaken)
 
 # ================================AGGLOMERATIVE CLUSTERING===============================
 
-EP_New, CP_New = AgglomerativeHierarchical.Agglomerative_Clustering(data, SBS, C, EP, CP, bestSampledProds, n_clusters=10)
+EP_New, CP_New = AgglomerativeHierarchical.Agglomerative_Clustering(data, SBS, C, EP, CP, bestSampledProds, n_clusters)
 
 print('AFTER AGGLOMERATIVE CLUSTERING:')
-# IG after KMeans
+# IG
 timeTaken = int(round(time.time() * 1000))
 selectedProdsIG, productScore = IG(k, C, SBS, EP_New, CP_New)
 timeTaken = int(round(time.time() * 1000)) - timeTaken
@@ -101,7 +145,7 @@ print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
 print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
-# SPGA after KMeans
+# SPG
 timeTaken = int(round(time.time() * 1000))
 selectedProdsSPG, productScore = SPG(k, C, SBS, EP_New, CP_New)
 timeTaken = int(round(time.time() * 1000)) - timeTaken 
