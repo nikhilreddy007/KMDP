@@ -9,7 +9,7 @@ import numpy as np
 import time
 
 
-# ====================================FILE HANDLING===================================
+# ====================================FILE HANDLING======================================
 
 # Change the fileLocation to your car.data folder
 dataLocation = "./data_process/car.csv"
@@ -24,7 +24,7 @@ except:
     SBS = createSBS(data, datasetLocation)
 
 
-# =======================================GLOBALS======================================
+# =======================================GLOBALS=========================================
 
 rows=len(SBS)
 cols=len(SBS[0])
@@ -38,7 +38,7 @@ CP = np.arange((rows*30)//100, rows)
 k = 5
 
 
-# =================================BEFORE CLUSTERING==================================
+# =================================BEFORE CLUSTERING=====================================
 
 print('BEFORE CLUSTERING:')
 # IG
@@ -58,7 +58,7 @@ print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
 
-# =====================================SAMPLING========================================
+# =====================================SAMPLING==========================================
 
 sampledEP, sampledCP = sampling(EP, CP)
 
@@ -66,13 +66,16 @@ bestSampledProds, productScore = SPG(k*2, C, SBS, sampledEP, sampledCP)
 # print("Best sampled products:", bestSampledProds)
 
 
-# =================================AFFINITY PROPAGATION===============================
+# =================================AFFINITY PROPAGATION==================================
 
+timeTaken = int(round(time.time() * 1000))
 EP_New, CP_New, n_clusters = AffinityPropagation.Affinity_Propagation(data, SBS, C, EP, CP, bestSampledProds)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print('Affinity Propagetion time:', timeTaken)
 
 print('AFTER AFFINITY PROPAGATION:')
 # IG
-timeTaken = int(round(time.time() * 1000))
+
 selectedProdsIG, productScore = IG(k, C, SBS, EP_New, CP_New)
 timeTaken = int(round(time.time() * 1000)) - timeTaken
 print("Incremental Based Greedy Algorithm : \n", selectedProdsIG)
@@ -88,9 +91,11 @@ print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
 
-# =================================MEAN SHIFT CLUSTERING==============================
-
+# =================================MEAN SHIFT CLUSTERING=================================
+timeTaken = int(round(time.time() * 1000))
 EP_New, CP_New = MeanShift.Mean_Shift(data, SBS, C, EP, CP, bestSampledProds)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print('Mean Shift time:', timeTaken)
 
 print('AFTER MEAN SHIFT CLUSTERING:')
 # IG
@@ -110,9 +115,12 @@ print("Time taken in millis:", timeTaken)
 # print("Product score:", productScore)
 
 
-# =================================KMEANS CLUSTERING====================================
+# =================================KMEANS CLUSTERING=====================================
 
+timeTaken = int(round(time.time() * 1000))
 EP_New, CP_New = KMeans.K_Means(data, SBS, C, EP, CP, bestSampledProds, n_clusters)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print('Kmeans time:', timeTaken)
 
 print('AFTER KMEANS CLUSTERING:')
 # IG
@@ -134,7 +142,10 @@ print("Time taken in millis:", timeTaken)
 
 # ================================AGGLOMERATIVE CLUSTERING===============================
 
+timeTaken = int(round(time.time() * 1000))
 EP_New, CP_New = AgglomerativeHierarchical.Agglomerative_Clustering(data, SBS, C, EP, CP, bestSampledProds, n_clusters)
+timeTaken = int(round(time.time() * 1000)) - timeTaken
+print('agglomertaive  time:', timeTaken)
 
 print('AFTER AGGLOMERATIVE CLUSTERING:')
 # IG
